@@ -167,14 +167,21 @@ class ConsumerCreditPipeline:
 
     def generate_summary_report(self, df):
         """
-        Generate summary statistics and insights from the processed data.
+        Generate summary statistics and visualizations.
         """
+        from visualizations import generate_visualizations
+        
         summary = {
             'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
             'total_loans': df.count(),
             'risk_distribution': df.groupBy('risk_category').count().toPandas().to_dict(),
             'avg_loan_duration': df.select(avg('loan_duration_days')).collect()[0][0],
             'total_loan_value': df.select(sum('loan_amount')).collect()[0][0]
+        
+        # Generate visualizations
+        visualizer = generate_visualizations(df)
+        
+         return summary
         }
         
         # Save summary report
