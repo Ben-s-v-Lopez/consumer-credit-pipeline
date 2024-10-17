@@ -1,0 +1,28 @@
+# Configuration for Consumer Credit Data Pipeline
+
+spark:
+  warehouse_dir: /tmp/spark-warehouse
+  
+# Required fields that should not contain null values
+required_fields:
+  - loan_id
+  - customer_id
+  - loan_amount
+  - start_date
+  - end_date
+  - interest_rate
+  - payment_frequency
+
+# Fields that should be checked for numerical outliers
+numerical_fields:
+  - loan_amount
+  - interest_rate
+  - credit_score
+  - debt_to_income_ratio
+
+# Weights for calculating credit risk score
+risk_weights:
+  credit_score: -0.4  # negative weight as higher score means lower risk
+  debt_to_income_ratio: 0.3
+  payment_history_score: -0.2
+  loan_amount: 0.1
