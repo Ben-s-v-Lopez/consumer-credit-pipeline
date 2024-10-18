@@ -18,7 +18,7 @@ def generate_sample_data(num_records=1000, output_path='data/raw/credit_data.csv
     base_date = datetime(2023, 1, 1)
     start_dates = [base_date + timedelta(days=random.randint(0, 365)) for _ in range(num_records)]
     loan_durations = np.random.choice([180, 365, 730, 1095], size=num_records)  # 6 months, 1,2,3 years
-    end_dates = [start + timedelta(days=duration) for start, duration in zip(start_dates, loan_durations)]
+    end_dates = [start + timedelta(days=int(duration)) for start, duration in zip(start_dates, loan_durations)]
     
     # Generate numerical data with realistic distributions
     loan_amounts = np.random.lognormal(mean=9, sigma=1, size=num_records)  # Centers around £8000
