@@ -166,30 +166,29 @@ class ConsumerCreditPipeline:
             raise
 
     def generate_summary_report(self, df):
-        """
-        Generate summary statistics and visualizations.
-        """
-        from visualizations import generate_visualizations
-        
-        summary = {
-            'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-            'total_loans': df.count(),
-            'risk_distribution': df.groupBy('risk_category').count().toPandas().to_dict(),
-            'avg_loan_duration': df.select(avg('loan_duration_days')).collect()[0][0],
-            'total_loan_value': df.select(sum('loan_amount')).collect()[0][0]
-        
-        # Generate visualizations
-        visualizer = generate_visualizations(df)
-        
-         return summary
-        }
-        
-        # Save summary report
-        with open('summary_report.yml', 'w') as file:
-            yaml.dump(summary, file)
-        
-        self.logger.info("Summary report generated")
-        return summary
+    """
+    Generate summary statistics and visualizations.
+    """
+    from visualizations import generate_visualizations
+    
+    # Generate summary statistics
+    summary = {
+        'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+        'total_loans': df.count(),
+        'risk_distribution': df.groupBy('risk_category').count().toPandas().to_dict(),
+        'avg_loan_duration': df.select(avg('loan_duration_days')).collect()[0][0],
+        'total_loan_value': df.select(sum('loan_amount')).collect()[0][0]
+    }
+    
+    # Generate visualizations
+    visualizer = generate_visualizations(df)
+    
+    # Save summary report
+    with open('summary_report.yml', 'w') as file:
+        yaml.dump(summary, file)
+    
+    self.logger.info("Summary report generated")
+    return summary
 
     def run_pipeline(self, input_path, output_path):
         """
